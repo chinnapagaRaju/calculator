@@ -1,0 +1,922 @@
+:root {
+  --light-bg: #F5F7FA;
+  --light-display-bg: linear-gradient(to bottom, #FFFFFF, #E6F0FA);
+  --light-keypad-bg: linear-gradient(to bottom, #E0F2F7, #D0E8F0);
+  --light-button-bg: #E6EEF3;
+  --light-operator-bg: #4A90E2;
+  --light-text: #333333;
+  --light-subtext: #888888;
+  --light-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(255, 255, 255, 0.5);
+  --light-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 -2px 4px rgba(255, 255, 255, 0.5);
+  --dark-bg: #282A36;
+  --dark-display-bg: #1A1B26;
+  --dark-keypad-bg: linear-gradient(to bottom, #1A2C42, #101D2A);
+  --dark-button-bg: #283E5C;
+  --dark-operator-bg: #4A90E2;
+  --dark-text: #FFFFFF;
+  --dark-subtext: #BBBBBB;
+  --dark-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 -4px 8px rgba(255, 255, 255, 0.1);
+  --dark-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--light-bg);
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+
+body.dark-mode {
+  background-color: var(--dark-bg);
+}
+
+.calculator {
+  background-color: var(--light-bg);
+  border-radius: 15px;
+  box-shadow: var(--light-shadow);
+  width: 100%;
+  max-width: 350px;
+  padding: 15px;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.dark-mode .calculator {
+  background-color: var(--dark-bg);
+  box-shadow: var(--dark-shadow);
+}
+
+.calculator-title {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--light-text);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(to right, #4A90E2, #50E3C2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark-mode .calculator-title {
+  color: var(--dark-text);
+  background: linear-gradient(to right, #50E3C2, #4A90E2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #E0E5EC;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .top-bar {
+  background-color: #3A3F50;
+}
+
+.menu-toggle {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .menu-toggle {
+  background-color: #1A2C42;
+}
+
+.menu-toggle::before {
+  content: '☰';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.theme-toggle, .history-toggle, .clear-history {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 8px;
+}
+
+.dark-mode .theme-toggle, .dark-mode .history-toggle, .dark-mode .clear-history {
+  background-color: #1A2C42;
+}
+
+.theme-toggle::before {
+  content: '☀️';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.dark-mode .theme-toggle::before {
+  content: '🌙';
+}
+
+.history-toggle::before {
+  content: '🕒';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.clear-history::before {
+  content: '🗑️';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: var(--light-bg);
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--light-shadow);
+  padding: 15px;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 3;
+}
+
+.dark-mode .sidebar {
+  background-color: var(--dark-bg);
+  box-shadow: var(--dark-shadow);
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-item {
+  padding: 10px;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.dark-mode .sidebar-item {
+  color: var(--dark-text);
+}
+
+.sidebar-item:hover {
+  background-color: #E0E5EC;
+}
+
+.dark-mode .sidebar-item:hover {
+  background-color: #3A3F50;
+}
+
+.history-panel {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: var(--light-bg);
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--light-shadow);
+  padding: 15px;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 2;
+}
+
+.dark-mode .history-panel {
+  background-color: var(--dark-bg);
+  box-shadow: var(--dark-shadow);
+}
+
+.history-panel.active {
+  left: 0;
+}
+
+.history-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--light-text);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.dark-mode .history-title {
+  color: var(--dark-text);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #E0E5EC;
+  color: var(--light-text);
+  transition: color 0.3s ease;
+  font-size: 0.9em;
+}
+
+.dark-mode .history-item {
+  border-bottom: 1px solid #3A3F50;
+  color: var(--dark-text);
+}
+
+.history-item span {
+  flex-grow: 1;
+}
+
+.history-item button {
+  background-color: transparent;
+  border: none;
+  color: #FF5555;
+  cursor: pointer;
+  font-size: 0.9em;
+  padding: 2px 5px;
+}
+
+.clear-history-btn {
+  display: block;
+  width: 3cm;
+  height: 1.5cm;
+  background-color: #FF5555;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .clear-history-btn {
+  background-color: #E64A4A;
+}
+
+.clear-history-btn:hover {
+  background-color: #CC0000;
+}
+
+.dark-mode .clear-history-btn:hover {
+  background-color: #B30000;
+}
+
+.display {
+  background: var(--light-display-bg);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 8px;
+  text-align: right;
+  transition: background 0.3s ease;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.dark-mode .display {
+  background: var(--dark-display-bg);
+}
+
+.equation, .result {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.equation {
+  font-size: 1.1em;
+  color: var(--light-subtext);
+  min-height: 1.1em;
+  transition: color 0.3s ease;
+}
+
+.dark-mode .equation {
+  color: var(--dark-subtext);
+}
+
+.result {
+  font-size: 2.5em;
+  color: var(--light-text);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.dark-mode .result {
+  color: var(--dark-text);
+}
+
+.keypad {
+  background: var(--light-keypad-bg);
+  border-radius: 0 0 15px 15px;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  transition: background 0.3s ease;
+}
+
+.dark-mode .keypad {
+  background: var(--dark-keypad-bg);
+}
+
+button {
+  background-color: var(--light-button-bg);
+  border: none;
+  border-radius: 40%;
+  aspect-ratio: 1/1;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: var(--light-text);
+  cursor: pointer;
+  box-shadow: var(--light-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+}
+
+.dark-mode button {
+  background-color: var(--dark-button-bg);
+  color: var(--dark-text);
+  box-shadow: var(--dark-shadow);
+}
+
+button:active {
+  box-shadow: var(--light-shadow-inset);
+  transform: translateY(2px);
+}
+
+.dark-mode button:active {
+  box-shadow: var(--dark-shadow-inset);
+}
+
+button.operator, button#clear, button#equals {
+  background-color: var(--light-operator-bg);
+}
+
+.dark-mode button.operator, .dark-mode button#clear, .dark-mode button#equals {
+  background-color: var(--dark-operator-bg);
+}
+
+@media (max-width: 600px) {
+  .calculator {
+    max-width: 85%;
+  }
+
+  .result {
+    font-size: 2em;
+  }
+
+  button {
+    font-size: 1em;
+  }
+
+  .history-panel {
+    width: 200px;
+    left: -200px;
+  }
+
+  .sidebar {
+    width: 200px;
+    left: -200px;
+  }
+
+
+/* calculator.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+body.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+.calculator {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+body.dark-mode .calculator {
+  background-color: #444;
+  color: #fff;
+}
+
+.calculator-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.menu-toggle, .theme-toggle, .clear-history {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.menu-toggle::before {
+  content: "☰";
+  font-size: 24px;
+}
+
+.theme-toggle::before {
+  content: "🌙";
+  font-size: 24px;
+}
+
+.clear-history::before {
+  content: "🗑️";
+  font-size: 24px;
+}
+
+.display {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+body.dark-mode .display {
+  background-color: #555;
+}
+
+.equation {
+  font-size: 0.9em;
+  color: #666;
+}
+
+body.dark-mode .equation {
+  color: #bbb;
+}
+
+.result {
+  font-size: 1.5em;
+  word-wrap: break-word;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+button {
+  padding: 15px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+}
+
+body.dark-mode button {
+  background-color: #666;
+  color: #fff;
+}
+
+.operator {
+  background-color: #ff9500;
+  color: white;
+}
+
+body.dark-mode .operator {
+  background-color: #ffaa33;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hidden by default */
+  width: 250px;
+  height: 100%;
+  background-color: #333; /* Dark background */
+  color: #fff;
+  transition: left 0.3s ease;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar.active {
+  left: 0; /* Slide in when active */
+}
+
+.sidebar-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff; /* White text for contrast */
+}
+
+.sidebar-item {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-item:hover {
+  background-color: #444;
+}
+
+.icon {
+  font-size: 1em;
+}
+
+#contentArea {
+  padding: 10px;
+}
+
+.clear-history-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-history-btn:hover {
+  background-color: #cc0000;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #555;
+}
+
+body.dark-mode .history-item {
+  border-bottom: 1px solid #888;
+}
+
+/* calculator.css (for Date Calculation section only) */
+.date-calc-container {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .date-calc-container {
+  background-color: #444;
+  color: #fff;
+}
+
+.date-section {
+  margin-bottom: 15px;
+}
+
+.date-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+body.dark-mode .date-section label {
+  color: #ddd;
+}
+
+.date-input {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+body.dark-mode .date-input {
+  background-color: #555;
+  border-color: #777;
+}
+
+.date-input input[type="date"] {
+  border: none;
+  background: none;
+  width: 150px;
+  font-size: 1em;
+  color: #333;
+}
+
+body.dark-mode .date-input input[type="date"] {
+  color: #fff;
+}
+
+.calendar-icon {
+  margin-left: 5px;
+  font-size: 1.2em;
+  color: #4a90e2;
+}
+
+.date-display {
+  margin-left: 10px;
+  font-size: 1em;
+  color: #666;
+}
+
+body.dark-mode .date-display {
+  color: #bbb;
+}
+
+.difference-section {
+  margin-top: 15px;
+}
+
+.difference-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+body.dark-mode .difference-section label {
+  color: #ddd;
+}
+
+.difference-display {
+  background-color: #e6f3ff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #333;
+  text-align: center;
+}
+
+body.dark-mode .difference-display {
+  background-color: #2a6eb6;
+  color: #fff;
+}
+
+.calc-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+body.dark-mode .calc-button {
+  background-color: #357abd;
+}
+
+.calc-button:hover {
+  background-color: #357abd;
+}
+
+
+/* calculator.css (for neon buttons only) */
+.neon-button {
+  position: relative;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1em;
+  color: #00ffff; /* Neon cyan */
+  border: 2px solid #00ffff;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.neon-button::before {
+  content: 'BUTTON';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff;
+}
+
+.neon-button:hover::before,
+.neon-button:active::before {
+  content: '';
+}
+
+.neon-button:hover,
+.neon-button:active {
+  color: #00ffff;
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+}
+
+.neon-button:hover .neon-text,
+.neon-button:active .neon-text {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.neon-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.neon-text span:first-child {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: 'Arial Black', sans-serif;
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff;
+}
+
+.neon-text span:last-child {
+  font-size: 0.8em;
+  margin-left: 5px;
+  color: #00ffff;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff;
+}
+
+.neon-button:hover .neon-text,
+.neon-button:active .neon-text {
+  opacity: 1;
+}
+
+
+
+/* calculator.css (for sidebar border animation only) */
+.sidebar-item {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 2px solid #00ffcc;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+  z-index: 0;
+}
+
+.sidebar-item.active::before {
+  width: 120%;
+  height: 120%;
+}
+
+.sidebar-item:hover {
+  background-color: #444;
+}
+
+
+/* calculator.css (for interest calculator only) */
+.interest-container {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .interest-container {
+  background-color: #444;
+  color: #fff;
+}
+
+.interest-container h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+body.dark-mode .interest-container h3 {
+  color: #ddd;
+}
+
+.input-section {
+  margin-bottom: 10px;
+}
+
+.input-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+body.dark-mode .input-section label {
+  color: #ddd;
+}
+
+.input-section input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: #f9f9f9;
+}
+
+body.dark-mode .input-section input[type="number"] {
+  border-color: #777;
+  background-color: #555;
+  color: #fff;
+}
+
+.result-section {
+  margin-top: 15px;
+}
+
+.result-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+body.dark-mode .result-section label {
+  color: #ddd;
+}
+
+.result-display {
+  padding: 10px;
+  background-color: #e6f3ff;
+  border-radius: 5px;
+  font-size: 1em;
+  color: #333;
+  text-align: center;
+}
+
+body.dark-mode .result-display {
+  background-color: #2a6eb6;
+  color: #fff;
+}
+
+/* ============================================================================================ */
+
+
+}
