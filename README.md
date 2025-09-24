@@ -15,3 +15,4 @@ This is a simple calculator application built with Python and Tkinter. It suppor
 - Error handling for invalid expressions
 
 Feel free to improve the UI or add more features!
+
